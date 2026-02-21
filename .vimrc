@@ -12,9 +12,8 @@ set smartcase
 " Show matches while typing the search pattern
 set incsearch
 
-" Show absolute & relative line numbers
+" Show absolute line numbers
 set number
-set relativenumber
 
 " Ensure text is never hidden by syntax conceal features (useful for Markdown/JSON/plugins)
 set conceallevel=0
