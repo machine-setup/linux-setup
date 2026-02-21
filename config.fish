@@ -1,14 +1,15 @@
 # Preferred editor
 set -gx EDITOR vim
 
-alias fishc="vim ~/.config.fish"
-alias fishs="source ~/.config.fish"
+alias fishc="vim ~/.config/fish/config.fish"
+alias fishs="source ~/.config/fish/config.fish"
 
 alias amend="git commit --amend --no-edit"
 alias review="git review"
 alias cached="git diff --cached"
 alias clean="git reset --hard; git clean -fd;"
 alias master="git checkout master"
+alias gst="git status"
 
 alias tinker="./scripts/tinker.php"
 alias x="./x.php"
