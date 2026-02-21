@@ -4,7 +4,9 @@ cd "$(dirname "$0")"
 
 cp .tmux.conf ~/.tmux.conf
 cp .vimrc ~/.vimrc
-cp .config.fish ~/.config.fish
+
+mkdir -p ~/.config/fish
+cp config.fish ~/.config/fish/config.fish
 
 # Install cli tools when using Ubuntu
 # if command -v apt &>/dev/null; then
