@@ -54,3 +54,15 @@ if status is-interactive
         tmux attach -t 0 2>/dev/null; or tmux attach 2>/dev/null
     end
 end
+
+# Forward the SSH agent socket into a stable symlink so tmux sessions can still
+# reach the agent after detaching and reattaching across different SSH connections.
+if set -q SSH_AUTH_SOCK; and test "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock"
+    ln -sf $SSH_AUTH_SOCK $HOME/.ssh/agent.sock
+    set -gx SSH_AUTH_SOCK $HOME/.ssh/agent.sock
+end
+
+# begin crisp completion
+crisp --completion-fish | source
+# end crisp completion
+# crisp-cli
