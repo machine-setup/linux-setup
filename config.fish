@@ -55,11 +55,33 @@ if status is-interactive
     end
 end
 
-# Forward the SSH agent socket into a stable symlink so tmux sessions can still
-# reach the agent after detaching and reattaching across different SSH connections.
-if set -q SSH_AUTH_SOCK; and test "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock"
-    ln -sf $SSH_AUTH_SOCK $HOME/.ssh/agent.sock
-    set -gx SSH_AUTH_SOCK $HOME/.ssh/agent.sock
+# Pulls the current SSH agent socket from tmux and updates the stable
+# symlink. Safe to call at any time; no-ops if not inside tmux.
+function refresh-ssh-agent
+    if set -q TMUX
+        # Ask tmux for the current agent socket path, suppress errors,
+        # and strip the "SSH_AUTH_SOCK=" prefix to get the bare path.
+        set tmux_output (tmux show-environment SSH_AUTH_SOCK 2>/dev/null)
+        set new_socket (echo $tmux_output | string replace "SSH_AUTH_SOCK=" "")
+
+        # Get the path the stable symlink currently points to.
+        set current_socket (readlink $HOME/.ssh/agent.sock)
+
+        # Only update if tmux reported a socket and it differs from the current one.
+        if test -n "$new_socket" -a "$new_socket" != "$current_socket"
+            echo "> Updating SSH agent socket"
+            ln -sf $new_socket $HOME/.ssh/agent.sock
+            set -gx SSH_AUTH_SOCK $HOME/.ssh/agent.sock
+        end
+    end
+end
+
+# Wrapper around git that refreshes the SSH agent first.
+# Ensures agent forwarding works immediately after tmux reattach
+# without needing to manually refresh in every pane.
+function git
+    refresh-ssh-agent
+    command git $argv
 end
 
 # begin crisp completion
