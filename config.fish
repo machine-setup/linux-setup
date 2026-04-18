@@ -1,3 +1,6 @@
+# Enable 24-bit true color support for terminal applications
+set -gx COLORTERM truecolor
+
 # Preferred editor
 set -gx EDITOR vim
 
@@ -15,6 +18,8 @@ alias tinker="./scripts/tinker.php"
 alias x="./x.php"
 alias lint="crisp t lint"
 
+# Add user-local binaries to PATH
+export PATH="$HOME/.local/bin:$PATH"
 
 # E.g. `pop 1`
 function pop
