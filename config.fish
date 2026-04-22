@@ -4,6 +4,9 @@ set -gx COLORTERM truecolor
 # Preferred editor
 set -gx EDITOR vim
 
+# Disable Claude uploads on commit
+set -x DISABLE_AI_SESSION_SYNC true
+
 alias fishc="vim ~/.config/fish/config.fish"
 alias fishs="source ~/.config/fish/config.fish"
 
